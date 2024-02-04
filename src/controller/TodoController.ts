@@ -9,6 +9,7 @@ export class TodoController {
     const { userId } = request;
     const todos = await this.todoRepository.find({
       where: { user: { id: userId } },
+      order: { todoDate: "ASC" },
     });
     return todos;
   }
@@ -52,6 +53,7 @@ export class TodoController {
     const { userId } = request;
 
     const { todoName, todoDate } = request.body;
+    console.log(todoName, todoDate);
     const newTodo = await this.todoRepository.save({
       todoName,
       todoDate: new Date(todoDate),
