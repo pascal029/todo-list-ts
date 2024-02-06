@@ -1,17 +1,12 @@
 import { AppDataSource } from "../data-source";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
-
+import {encryptPassword, comparePassword} from "../helpers/bcrypt"
+import {signJwt} from "../helpers/jwt"
 export class UserController {
   private userRepository = AppDataSource.getRepository(User);
 
-  async all(request: Request, response: Response, next: NextFunction) {
-    return this.userRepository.find();
-  }
-
-  async one(request: Request, response: Response, next: NextFunction) {
-    const id = parseInt(request.params.id);
-
+  async one(id: number) {
     const user = await this.userRepository.findOne({
       where: { id },
     });
@@ -30,10 +25,11 @@ export class UserController {
       lastName,
       email,
       username,
-      password,
+      password : encryptPassword(password),
     });
 
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+    return "User has been created"
   }
 
   async remove(request: Request, response: Response, next: NextFunction) {
@@ -51,6 +47,14 @@ export class UserController {
   }
 
   async login(request: Request, response: Response, next: NextFunction) {
-    return { message: true };
+    const {email, password} = request.body
+
+    const user = await this.userRepository.findOne({
+      where : {email}
+    })
+
+    if(!user || !comparePassword(password, user.password)) return "Incorrect Email or Password"
+
+    return {accessToken : signJwt({id : user.id})}
   }
 }

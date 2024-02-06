@@ -6,6 +6,7 @@ import errorHandler from "./middlewares/errorHandler";
 import { validationResult } from "express-validator";
 import * as cors from "cors";
 
+
 AppDataSource.initialize()
   .then(async () => {
     const app = express();
