@@ -1,5 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { Todo } from "./Todo";
+import { Income } from "./Incomes";
+import { IncomeSource } from "./IncomeSources";
+import { IncomeAllocation } from "./IncomeAllocations";
 
 @Entity()
 export class User {
@@ -29,4 +39,17 @@ export class User {
 
   @OneToMany(() => Todo, (todo) => todo.user)
   todos: Todo[];
+
+  @OneToMany(() => IncomeSource, (incomeSource) => incomeSource.user)
+  incomeSources: IncomeSource[];
+
+  @OneToMany(
+    () => IncomeAllocation,
+    (incomeAllocation) => incomeAllocation.user
+  )
+  allocations: IncomeAllocation[];
+
+  @OneToOne(() => Income)
+  @JoinColumn()
+  income: Income;
 }

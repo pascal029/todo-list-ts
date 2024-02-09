@@ -6,7 +6,6 @@ import errorHandler from "./middlewares/errorHandler";
 import { validationResult } from "express-validator";
 import * as cors from "cors";
 
-
 AppDataSource.initialize()
   .then(async () => {
     const app = express();
@@ -22,14 +21,17 @@ AppDataSource.initialize()
         async (req: Request, res: Response, next: Function) => {
           try {
             const errors = validationResult(req);
+
             if (!errors.isEmpty()) {
               return res.status(400).json({ errors: errors.array() });
             }
+
             const result = await new (route.controller as any)()[route.action](
               req,
               res,
               next
             );
+
             return res.json(result);
           } catch (error) {
             next(error);
@@ -42,7 +44,7 @@ AppDataSource.initialize()
     app.listen(3000);
 
     console.log(
-      "Express server has started on port 3000. Open http://localhost:3000/users to see results"
+      "Express server has started on port 3000. Open http://localhost:3000 to see results"
     );
   })
   .catch((error) => console.log(error));

@@ -15,7 +15,6 @@ export class TodoController {
   }
 
   async findOne(request: Request, response: Response, next: NextFunction) {
-    const { userId } = request;
     const { todoId } = request.params;
     const todo = await this.todoRepository.findOne({
       where: { id: Number(todoId) },
@@ -25,6 +24,7 @@ export class TodoController {
 
   async changeStatus(request: Request, response: Response, next: NextFunction) {
     const { todoId } = request.params;
+    console.log(todoId);
 
     const todo = await this.todoRepository.findOne({
       where: { id: Number(todoId) },
@@ -53,7 +53,6 @@ export class TodoController {
     const { userId } = request;
 
     const { todoName, todoDate } = request.body;
-    console.log(todoName, todoDate);
     const newTodo = await this.todoRepository.save({
       todoName,
       todoDate: new Date(todoDate),
