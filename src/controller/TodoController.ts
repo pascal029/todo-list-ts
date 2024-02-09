@@ -9,12 +9,12 @@ export class TodoController {
     const { userId } = request;
     const todos = await this.todoRepository.find({
       where: { user: { id: userId } },
+      order: { todoDate: "ASC" },
     });
     return todos;
   }
 
   async findOne(request: Request, response: Response, next: NextFunction) {
-    const { userId } = request;
     const { todoId } = request.params;
     const todo = await this.todoRepository.findOne({
       where: { id: Number(todoId) },
@@ -24,6 +24,7 @@ export class TodoController {
 
   async changeStatus(request: Request, response: Response, next: NextFunction) {
     const { todoId } = request.params;
+    console.log(todoId);
 
     const todo = await this.todoRepository.findOne({
       where: { id: Number(todoId) },
