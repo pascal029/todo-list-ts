@@ -1,3 +1,4 @@
+import { allocationRoutes } from "./routes/allocationRoutes";
 import { incomeRoutes } from "./routes/incomeRoutes";
 import { incomeSourceRoutes } from "./routes/incomeSourceRoutes";
 import { todoRoutes } from "./routes/todoRoutes";
@@ -8,4 +9,5 @@ export const Routes = [
   ...todoRoutes,
   ...incomeSourceRoutes,
   ...incomeRoutes,
+  ...allocationRoutes,
 ];

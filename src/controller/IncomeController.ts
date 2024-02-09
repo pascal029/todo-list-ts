@@ -49,4 +49,20 @@ export class IncomeController {
 
     // const newIncome =
   }
+
+  async updateUsage(request) {
+    const { allocationAmount: amount } = request.body;
+    const income = await this.create(request, "_", "__");
+
+    const usedAllocation = (income.usage * income.amount) / 100;
+
+    const newUsedAllocation =
+      ((Number(amount) + usedAllocation) / income.amount) * 100;
+
+    if (newUsedAllocation > 100) throw { name: "max_allocation_reached" };
+    income.usage = newUsedAllocation;
+
+    await this.incomeRepository.save(income);
+    return income;
+  }
 }
